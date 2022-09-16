@@ -6,7 +6,7 @@ import { Filter } from "./Filter/Filter";
 import { ContactList } from "./ContactList/ContactList";
 import { Section } from "./Section/Section";
 
-
+const LS_KEY = 'contacts';
 
 export class App extends Component {
 
@@ -18,6 +18,18 @@ export class App extends Component {
       {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
     ],
     filter: '',
+  }
+
+  componentDidMount() {
+    const storageContacts = localStorage.getItem(LS_KEY);
+    storageContacts && this.setState({ contacts: JSON.parse(storageContacts) });
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts.lenght !== this.state.contacts.length) {
+      localStorage.setItem(LS_KEY, JSON.stringify(this.state.contacts));
+      console.log(this.state.contacts);
+    }
   }
 
   handleOnSubmit = (data) => {
